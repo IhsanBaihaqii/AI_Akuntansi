@@ -494,6 +494,7 @@
           flex-shrink: 0;
           height: 65px;
           justify-content: center;
+          cursor: pointer;
       }
       
       .footer-menu-item:hover {
@@ -538,35 +539,110 @@
           background: var(--primary-dark);
       }
       
-      /* Scroll Indicators */
-      .scroll-indicator {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 30px;
-          height: 30px;
-          background: rgba(99, 102, 241, 0.8);
-          border-radius: 50%;
-          display: flex;
+      /* Modal Styles */
+      .modal {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: rgba(0, 0, 0, 0.7);
+          z-index: 1000;
           align-items: center;
           justify-content: center;
-          color: white;
+      }
+      
+      .modal.active {
+          display: flex;
+      }
+      
+      .modal-content {
+          background-color: var(--dark-card);
+          border-radius: 12px;
+          padding: 30px;
+          width: 90%;
+          max-width: 500px;
+          border: 1px solid var(--dark-border);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+      
+      .modal-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          padding-bottom: 15px;
+          border-bottom: 1px solid var(--dark-border);
+      }
+      
+      .modal-title {
+          font-size: 1.3rem;
+          font-weight: 600;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+      }
+      
+      .modal-close {
+          background: none;
+          border: none;
+          color: var(--text-muted);
+          font-size: 1.2rem;
           cursor: pointer;
-          z-index: 91;
-          opacity: 0;
-          transition: opacity 0.3s;
+          padding: 5px;
+          border-radius: 4px;
+          transition: all 0.2s;
       }
       
-      .scroll-left {
-          left: 10px;
+      .modal-close:hover {
+          background-color: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
       }
       
-      .scroll-right {
-          right: 10px;
+      .modal-body {
+          margin-bottom: 25px;
       }
       
-      footer:hover .scroll-indicator {
-          opacity: 1;
+      .form-group {
+          margin-bottom: 20px;
+      }
+      
+      .form-label {
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 500;
+          color: var(--text-light);
+      }
+      
+      .form-textarea {
+          width: 100%;
+          padding: 12px;
+          border-radius: 8px;
+          border: 1px solid var(--dark-border);
+          background-color: var(--dark-bg);
+          color: var(--text-light);
+          font-size: 0.95rem;
+          resize: vertical;
+          min-height: 120px;
+          font-family: inherit;
+      }
+      
+      .form-textarea:focus {
+          outline: none;
+          border-color: var(--primary);
+      }
+      
+      .form-hint {
+          font-size: 0.8rem;
+          color: var(--text-muted);
+          margin-top: 5px;
+      }
+      
+      .modal-footer {
+          display: flex;
+          justify-content: flex-end;
+          gap: 12px;
       }
       
       /* Responsive Styles */
@@ -623,6 +699,11 @@
               min-width: 80px;
               padding: 10px 14px;
           }
+          
+          .modal-content {
+              width: 95%;
+              padding: 20px;
+          }
       }
       
       @media (max-width: 768px) {
@@ -668,6 +749,14 @@
           .footer-menu-item span {
               font-size: 0.7rem;
           }
+          
+          .modal-footer {
+              flex-direction: column;
+          }
+          
+          .modal-footer .btn {
+              width: 100%;
+          }
       }
       
       @media (max-width: 576px) {
@@ -704,12 +793,6 @@
           
           .footer-menu-item span {
               font-size: 0.65rem;
-          }
-          
-          .scroll-indicator {
-              width: 25px;
-              height: 25px;
-              font-size: 0.8rem;
           }
       }
     </style>
@@ -817,7 +900,7 @@
                             <i class="fas fa-download"></i>
                             Load
                         </button>
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" id="addTransactionBtn">
                             <i class="fas fa-plus"></i>
                             Tambahkan
                         </button>
@@ -888,7 +971,7 @@
                 </div>
                 
                 <div class="quick-actions">
-                    <div class="action-card">
+                    <div class="action-card" id="quickJournalBtn">
                         <div class="action-icon">
                             <i class="fas fa-plus-circle"></i>
                         </div>
@@ -927,7 +1010,7 @@
     <!-- Footer Navigation -->
     <footer>
         <div class="footer-nav">
-            <a href="journal.php" class="footer-menu-item">
+            <a href="journal.php" class="footer-menu-item" id="footerJournalBtn">
                 <i class="fas fa-book"></i>
                 <span>Journal Umum</span>
             </a>
@@ -958,10 +1041,56 @@
         </div>
     </footer>
     
+    <!-- Modal for Journal Input -->
+    <div class="modal" id="journalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fas fa-book"></i>
+                    Masukkan Journal Umum
+                </h3>
+                <button class="modal-close" id="modalClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Deskripsi Transaksi:</label>
+                    <textarea class="form-textarea" id="journalInput" placeholder="Contoh: menerima pendapatan 2juta sebagai modal"></textarea>
+                    <div class="form-hint">
+                        Tuliskan transaksi dalam bahasa Indonesia yang jelas dan sederhana.
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelBtn">
+                    <i class="fas fa-times"></i>
+                    Cancel
+                </button>
+                <button class="btn btn-primary" id="submitJournalBtn">
+                    <i class="fas fa-paper-plane"></i>
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+    
     <script>
         const hamburger = document.querySelector('.hamburger');
         const sidebar = document.querySelector('.sidebar');
         const overlay = document.querySelector('.overlay');
+        
+        // Modal elements
+        const journalModal = document.getElementById('journalModal');
+        const modalClose = document.getElementById('modalClose');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const submitJournalBtn = document.getElementById('submitJournalBtn');
+        const journalInput = document.getElementById('journalInput');
+        
+        // Buttons to open modal
+        const addTransactionBtn = document.getElementById('addTransactionBtn');
+        const quickJournalBtn = document.getElementById('quickJournalBtn');
+        const footerJournalBtn = document.getElementById('footerJournalBtn');
         
         hamburger.addEventListener('click', () => {
             sidebar.classList.toggle('open');
@@ -971,6 +1100,49 @@
         overlay.addEventListener('click', () => {
             sidebar.classList.remove('open');
             overlay.classList.remove('active');
+        });
+        
+        // Open modal functions
+        function openJournalModal() {
+            journalModal.classList.add('active');
+            journalInput.focus();
+        }
+        
+        function closeJournalModal() {
+            journalModal.classList.remove('active');
+            journalInput.value = '';
+        }
+        
+        // Event listeners for opening modal
+        addTransactionBtn.addEventListener('click', openJournalModal);
+        quickJournalBtn.addEventListener('click', openJournalModal);
+        footerJournalBtn.addEventListener('click', openJournalModal);
+        
+        // Event listeners for closing modal
+        modalClose.addEventListener('click', closeJournalModal);
+        cancelBtn.addEventListener('click', closeJournalModal);
+        
+        // Submit journal function
+        submitJournalBtn.addEventListener('click', () => {
+            const inputText = journalInput.value.trim();
+            
+            if (!inputText) {
+                alert('Silakan masukkan deskripsi transaksi!');
+                return;
+            }
+            
+            // Here you would typically process the journal input
+            console.log('Journal input:', inputText);
+            alert(`Journal berhasil disubmit: "${inputText}"`);
+            
+            closeJournalModal();
+        });
+        
+        // Close modal when clicking outside
+        journalModal.addEventListener('click', (e) => {
+            if (e.target === journalModal) {
+                closeJournalModal();
+            }
         });
         
         // Highlight active menu item

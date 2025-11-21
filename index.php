@@ -8,12 +8,21 @@
     <title>Aishan AI - Login</title>
     <style>
       :root {
-        --primary: #4a6cf7;
-        --primary-dark: #3a5ce5;
-        --error: #e74c3c;
-        --light-gray: #f5f5f5;
-        --gray: #e0e0e0;
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --secondary: #94a3b8;
+        --dark-bg: #0f172a;
+        --dark-card: #1e293b;
+        --dark-border: #334155;
         --dark-gray: #757575;
+        --gray: #e0e0e0;
+        --light-gray: #f5f5f5;
+        --text-light: #f1f5f9;
+        --text-muted: #94a3b8;
+        --sidebar-width: 260px;
+        --header-height: 70px;
+        --footer-height: 80px;
+        --error: #e74c3c;
       }
 
       * {
@@ -24,7 +33,7 @@
       }
 
       body {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--dark-bg) 0%, var(--dark-card) 100%);
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -155,7 +164,6 @@
         Invalid username or password. Please try again.
        </div>
       <?php endif; ?>
-
 
       <div class="form-container">
         <form method="post" action="login.php">

@@ -802,7 +802,7 @@
     <header>
         <div class="logo">
             <div class="logo-icon">
-                <i class="fas fa-brain"></i>
+                <i class="fas fa-robot"></i>
             </div>
             <h1>Aishan AI</h1>
         </div>

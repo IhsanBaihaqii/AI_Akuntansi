@@ -890,7 +890,7 @@
             
             <div class="content-section">
                 <div class="section-header">
-                    <h3 class="section-title">Recent Transactions</h3>
+                    <h3 class="section-title">Journal Umum</h3>
                     <div class="section-actions">
                         <button class="btn btn-warning">
                             <i class="fas fa-redo"></i>

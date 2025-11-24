@@ -1,3 +1,7 @@
+<?php
+require_once "config.php";
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -362,24 +366,24 @@
       
       th {
           text-align: left;
-          padding: 12px 16px;
+          padding: 12px 11px;
           font-weight: 600;
           color: var(--text-muted);
           border-bottom: 1px solid var(--dark-border);
-          font-size: 0.9rem;
+          font-size: 0.85rem;
       }
       
       td {
-          padding: 16px;
+          padding: 11px;
           border-bottom: 1px solid var(--dark-border);
-          font-size: 0.95rem;
+          font-size: 0.8rem;
       }
       
       tr:last-child td {
           border-bottom: none;
       }
       
-      .status-badge {
+      .account-badge {
           padding: 6px 12px;
           border-radius: 20px;
           font-size: 0.8rem;
@@ -387,17 +391,17 @@
           display: inline-block;
       }
       
-      .status-completed {
+      .account-debit {
           background-color: rgba(16, 185, 129, 0.1);
           color: #10b981;
       }
       
-      .status-pending {
-          background-color: rgba(245, 158, 11, 0.1);
-          color: #f59e0b;
+      .account-credit {
+          background-color: rgba(245, 11, 11, 0.1);
+          color: #f50b0bff;
       }
       
-      .status-processing {
+      .account-idk {
           background-color: rgba(99, 102, 241, 0.1);
           color: var(--primary);
       }
@@ -809,13 +813,12 @@
         
         <div class="user-info">
             <div class="user-avatar">
-                <!-- <?php 
+                <?php 
                     $username = $_SESSION['username'];
-                    echo strtoupper(substr($username, 0, 1)); 
-                ?> -->
-                I
+                    echo strtoupper(substr(readUser($username)["name"], 0, 1)); 
+                ?>
             </div>
-            <span><?php echo htmlspecialchars($username); ?></span>
+            <span><?php echo readUser($username)["name"]; ?></span>
             <div class="hamburger">
                 <div></div>
                 <div></div>
@@ -916,7 +919,6 @@
                                 <th>Account</th>
                                 <th>Debit</th>
                                 <th>Credit</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -924,9 +926,8 @@
                                 <td>15 Mar 2023</td>
                                 <td>Sales - Product A</td>
                                 <td>Cash</td>
-                                <td>Rp 5.000.000</td>
+                                <td><span class="account-badge account-debit">Rp 5.000.000</span></td>
                                 <td>-</td>
-                                <td><span class="status-badge status-completed">Completed</span></td>
                             </tr>
                             <tr>
                                 <td>14 Mar 2023</td>
@@ -934,7 +935,6 @@
                                 <td>Expenses</td>
                                 <td>-</td>
                                 <td>Rp 1.250.000</td>
-                                <td><span class="status-badge status-completed">Completed</span></td>
                             </tr>
                             <tr>
                                 <td>13 Mar 2023</td>
@@ -942,7 +942,6 @@
                                 <td>Fixed Assets</td>
                                 <td>Rp 12.500.000</td>
                                 <td>-</td>
-                                <td><span class="status-badge status-processing">Processing</span></td>
                             </tr>
                             <tr>
                                 <td>12 Mar 2023</td>
@@ -950,7 +949,6 @@
                                 <td>Accounts Receivable</td>
                                 <td>-</td>
                                 <td>Rp 7.800.000</td>
-                                <td><span class="status-badge status-completed">Completed</span></td>
                             </tr>
                             <tr>
                                 <td>11 Mar 2023</td>
@@ -958,7 +956,6 @@
                                 <td>Expenses</td>
                                 <td>-</td>
                                 <td>Rp 2.350.000</td>
-                                <td><span class="status-badge status-pending">Pending</span></td>
                             </tr>
                         </tbody>
                     </table>

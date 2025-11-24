@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once "config.php";
 
 // Redirect jika sudah login
 if (isset($_SESSION['username'])) {
@@ -10,6 +10,7 @@ if (isset($_SESSION['username'])) {
 // Check for login error
 $login_error = isset($_GET['error']);
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -560,7 +561,7 @@ $login_error = isset($_GET['error']);
             font-size: 0.875rem;
             margin-top: 0.5rem;
             text-align: center;
-            display: <?php echo $login_error ? 'block' : 'none'; ?>;
+            display: <?php echo $login_error ? "block" : "none"?>;
         }
         
         /* Footer */
@@ -870,7 +871,7 @@ $login_error = isset($_GET['error']);
             document.body.style.overflow = 'hidden';
             // Reset form and error message
             loginForm.reset();
-            errorMessage.style.display = 'none';
+            //errorMessage.style.display = 'none';
         }
         
         // Close modal function
